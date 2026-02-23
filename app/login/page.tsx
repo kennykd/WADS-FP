@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { auth } from "@/lib/firebase";
-import { signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -45,6 +49,12 @@ export default function LoginPage() {
       router.refresh();
     } catch (error: any) {
       console.error(error);
+
+      // If the firebase auth popup is closed by the user, cancel the login
+      if (error?.code === "auth/popup-closed-by-user") {
+        toast.error("Google login cancelled");
+        return;
+      }
       toast.error(error.message || "Login failed");
     } finally {
       setLoading(false);
@@ -87,7 +97,9 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-muted/40 px-4">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader>
-          <CardTitle className="text-center text-2xl">Sign in to Your Account</CardTitle>
+          <CardTitle className="text-center text-2xl">
+            Sign in to Your Account
+          </CardTitle>
         </CardHeader>
 
         <CardContent className="space-y-4">
@@ -106,22 +118,31 @@ export default function LoginPage() {
             <Separator className="flex-1" />
           </div>
 
-          <Input
-            placeholder="Email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          {/* Make the email and password login an input form */}
+          <form
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleEmailLogin();
+            }}
+          >
+            <Input
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-          <Button className="w-full" onClick={handleEmailLogin} disabled={loading}>
-            {loading ? "Signing in..." : "Login with Email"}
-          </Button>
+            <Button className="w-full" type="submit" disabled={loading}>
+              {loading ? "Signing in..." : "Login with Email"}
+            </Button>
+          </form>
         </CardContent>
       </Card>
     </div>
