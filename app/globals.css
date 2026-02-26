@@ -225,3 +225,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ============================================================
+   SONNER TOAST — Blueprint theme overrides
+   ============================================================ */
+[data-sonner-toaster] [data-sonner-toast] {
+  border-left: 3px solid var(--accent) !important;
+}
+.dark [data-sonner-toaster] [data-sonner-toast] {
+  background: oklch(0.27 0.15 264) !important;
+  color: oklch(1 0 0) !important;
+  border-color: var(--accent) !important;
+}

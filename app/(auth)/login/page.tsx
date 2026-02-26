@@ -94,18 +94,25 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted/40 px-4">
-      <Card className="w-full max-w-md shadow-lg">
-        <CardHeader>
-          <CardTitle className="text-center text-2xl">
-            Sign in to Your Account
+    <div className="w-full max-w-md">
+      <div className="text-center mb-8">
+        <h1 className="font-display text-4xl font-extrabold tracking-tight text-foreground">
+          SCHOLAR&apos;S PLOT
+        </h1>
+        <p className="font-mono text-xs tracking-widest text-accent mt-1">V1.0 — STUDENT PLANNER</p>
+      </div>
+
+      <Card className="border border-accent/30 bg-card/80 backdrop-blur-sm shadow-2xl">
+        <CardHeader className="border-t-2 border-accent rounded-t-xl pb-2">
+          <CardTitle className="font-display text-xl font-bold text-center text-foreground">
+            Sign In
           </CardTitle>
         </CardHeader>
 
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 pt-4">
           <Button
             variant="outline"
-            className="w-full"
+            className="w-full border-border hover:border-accent hover:text-accent transition-colors"
             onClick={handleGoogleLogin}
             disabled={loading}
           >
@@ -114,19 +121,19 @@ export default function LoginPage() {
 
           <div className="flex items-center gap-2">
             <Separator className="flex-1" />
-            <span className="text-xs text-muted-foreground">OR</span>
+            <span className="font-mono text-xs text-muted-foreground">OR</span>
             <Separator className="flex-1" />
           </div>
 
-          {/* Make the email and password login an input form */}
           <form
-            className="space-y-4"
+            className="space-y-3"
             onSubmit={(e) => {
               e.preventDefault();
               handleEmailLogin();
             }}
           >
             <Input
+              type="email"
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -139,10 +146,21 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            <Button className="w-full" type="submit" disabled={loading}>
-              {loading ? "Signing in..." : "Login with Email"}
+            <Button
+              className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
+
+          <p className="text-center text-sm text-muted-foreground">
+            Don&apos;t have an account?{" "}
+            <a href="/register" className="text-accent hover:underline font-medium">
+              Register
+            </a>
+          </p>
         </CardContent>
       </Card>
     </div>

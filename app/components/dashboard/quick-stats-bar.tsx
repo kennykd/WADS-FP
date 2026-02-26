@@ -1,0 +1,43 @@
+import { Card, CardContent } from "@/components/ui/card";
+import { mockAnalytics } from "@/lib/mock-data";
+import { Flame, CheckCircle2, Clock } from "lucide-react";
+
+export function QuickStatsBar() {
+  const { streak, totalTasksCompleted, totalFocusMinutes } = mockAnalytics;
+  const focusHours = Math.floor(totalFocusMinutes / 60);
+  const focusMins = totalFocusMinutes % 60;
+
+  const stats = [
+    {
+      icon: <Flame className="h-5 w-5 text-accent" />,
+      label: "Streak",
+      value: `${streak} days`,
+    },
+    {
+      icon: <CheckCircle2 className="h-5 w-5 text-green-400" />,
+      label: "Completed",
+      value: `${totalTasksCompleted} tasks`,
+    },
+    {
+      icon: <Clock className="h-5 w-5 text-blue-400" />,
+      label: "Focus Time",
+      value: `${focusHours}h ${focusMins}m`,
+    },
+  ];
+
+  return (
+    <Card className="bg-card/80 backdrop-blur-sm border-border/50">
+      <CardContent className="pt-4">
+        <div className="grid grid-cols-3 divide-x divide-border/50">
+          {stats.map(({ icon, label, value }) => (
+            <div key={label} className="flex flex-col items-center gap-1 px-3 py-1">
+              {icon}
+              <span className="font-display text-lg font-bold text-foreground">{value}</span>
+              <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider">{label}</span>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
