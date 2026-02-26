@@ -12,8 +12,8 @@ export function WeeklyScheduleMini() {
   const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
   return (
-    <Card className="bg-card/80 backdrop-blur-sm border-border/50">
-      <CardHeader className="pb-3">
+    <Card className="bg-card/80 backdrop-blur-sm border-0">
+      <CardHeader className="pb-4">
         <CardTitle className="font-display text-base font-bold tracking-wide">
           THIS WEEK
         </CardTitle>

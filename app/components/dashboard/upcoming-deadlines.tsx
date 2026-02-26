@@ -12,13 +12,13 @@ export function UpcomingDeadlines() {
     .slice(0, 5);
 
   return (
-    <Card className="bg-card/80 backdrop-blur-sm border-border/50">
-      <CardHeader className="pb-3">
+    <Card className="bg-card/80 backdrop-blur-sm border-0">
+      <CardHeader className="pb-4">
         <CardTitle className="font-display text-base font-bold tracking-wide">
           UPCOMING DEADLINES
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="space-y-3">
         {upcoming.map((task) => {
           const overdue = isPast(task.deadline);
           const distance = formatDistanceToNow(task.deadline, { addSuffix: true });
@@ -27,12 +27,12 @@ export function UpcomingDeadlines() {
               key={task.id}
               href={`/tasks/${task.id}`}
               className={cn(
-                "flex items-center justify-between rounded-lg px-3 py-2 border-l-4 bg-background/30",
-                "hover:bg-background/50 transition-colors",
+                "flex items-center justify-between rounded-lg px-4 py-3 border-l-4 bg-background/40",
+                "hover:bg-background/60 transition-colors",
                 `priority-${Math.round(task.priority)}`
               )}
             >
-              <span className="text-sm font-medium truncate flex-1 mr-2">{task.title}</span>
+              <span className="text-sm font-medium truncate flex-1 mr-3">{task.title}</span>
               <Badge
                 variant={overdue ? "destructive" : "outline"}
                 className="shrink-0 font-mono text-xs"

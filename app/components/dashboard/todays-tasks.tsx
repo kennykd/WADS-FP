@@ -33,13 +33,13 @@ export function TodaysTasks() {
   };
 
   return (
-    <Card className="bg-card/80 backdrop-blur-sm border-border/50">
-      <CardHeader className="pb-3">
+    <Card className="bg-card/80 backdrop-blur-sm border-0">
+      <CardHeader className="pb-4">
         <CardTitle className="font-display text-base font-bold tracking-wide">
           TODAY&apos;S TASKS
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="space-y-3">
         {tasks.map((task) => {
           const done = completed.has(task.id);
           const badge = getDeadlineBadge(task.deadline);
@@ -47,7 +47,7 @@ export function TodaysTasks() {
             <div
               key={task.id}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 border-l-4 bg-background/30 transition-opacity",
+                "flex items-center gap-3 rounded-lg px-4 py-3 border-l-4 bg-background/40 transition-opacity",
                 `priority-${Math.round(task.priority)}`,
                 done && "opacity-50"
               )}

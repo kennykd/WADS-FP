@@ -26,13 +26,18 @@ export function QuickStatsBar() {
   ];
 
   return (
-    <Card className="bg-card/80 backdrop-blur-sm border-border/50">
-      <CardContent className="pt-4">
-        <div className="grid grid-cols-3 divide-x divide-border/50">
-          {stats.map(({ icon, label, value }) => (
-            <div key={label} className="flex flex-col items-center gap-1 px-3 py-1">
+    <Card className="bg-card/80 backdrop-blur-sm border-0">
+      <CardContent className="p-0">
+        <div className="grid grid-cols-3">
+          {stats.map(({ icon, label, value }, index) => (
+            <div 
+              key={label} 
+              className={`flex flex-col items-center gap-2 px-4 py-4 ${
+                index < stats.length - 1 ? "border-r border-border/30" : ""
+              }`}
+            >
               {icon}
-              <span className="font-display text-lg font-bold text-foreground">{value}</span>
+              <span className="font-display text-xl font-bold text-foreground">{value}</span>
               <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider">{label}</span>
             </div>
           ))}
