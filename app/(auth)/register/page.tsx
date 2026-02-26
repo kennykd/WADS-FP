@@ -6,8 +6,6 @@ import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } f
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import Link from "next/link";
 
@@ -76,84 +74,97 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="w-full max-w-md">
-      <div className="text-center mb-8">
-        <h1 className="font-display text-4xl font-extrabold tracking-tight text-foreground">
+    <div className="w-full max-w-sm space-y-8">
+      {/* Header */}
+      <div className="text-center space-y-2">
+        <h1 className="font-display text-4xl font-extrabold tracking-tight text-white">
           SCHOLAR&apos;S PLOT
         </h1>
-        <p className="font-mono text-xs tracking-widest text-accent mt-1">V1.0 — CREATE ACCOUNT</p>
+        <p className="font-mono text-xs tracking-[0.2em] text-white/60">
+          V1.0 — CREATE ACCOUNT
+        </p>
       </div>
 
-      <Card className="border border-accent/30 bg-card/80 backdrop-blur-sm shadow-2xl">
-        <CardHeader className="border-t-2 border-accent rounded-t-xl pb-2">
-          <h2 className="font-display text-xl font-bold text-center text-foreground">
-            Create Account
-          </h2>
-        </CardHeader>
+      {/* Form */}
+      <div className="space-y-4">
+        <Button
+          variant="outline"
+          className="w-full bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white h-12"
+          onClick={handleGoogleSignUp}
+          disabled={loading}
+        >
+          {loading ? "Processing..." : "Continue with Google"}
+        </Button>
 
-        <CardContent className="space-y-4 pt-4">
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-white/10" />
+          </div>
+          <div className="relative flex justify-center text-xs">
+            <span className="bg-[#1A2DAB] px-2 text-white/40 font-mono">OR</span>
+          </div>
+        </div>
+
+        <form className="space-y-3" onSubmit={handleRegister}>
+          <Input
+            placeholder="Display Name"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            required
+            className="bg-white/5 border-white/20 text-white placeholder:text-white/40 h-12 focus:border-[#FF4D2E] focus:ring-[#FF4D2E]"
+          />
+          <Input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="bg-white/5 border-white/20 text-white placeholder:text-white/40 h-12 focus:border-[#FF4D2E] focus:ring-[#FF4D2E]"
+          />
+          <Input
+            type="password"
+            placeholder="Password (min 6 chars)"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            minLength={6}
+            className="bg-white/5 border-white/20 text-white placeholder:text-white/40 h-12 focus:border-[#FF4D2E] focus:ring-[#FF4D2E]"
+          />
+          <Input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+            minLength={6}
+            className="bg-white/5 border-white/20 text-white placeholder:text-white/40 h-12 focus:border-[#FF4D2E] focus:ring-[#FF4D2E]"
+          />
           <Button
-            variant="outline"
-            className="w-full border-border hover:border-accent hover:text-accent transition-colors"
-            onClick={handleGoogleSignUp}
+            className="w-full bg-[#FF4D2E] hover:bg-[#e04327] text-white font-semibold h-12"
+            type="submit"
             disabled={loading}
           >
-            {loading ? "Processing..." : "Continue with Google"}
+            {loading ? "Creating account..." : "Create Account"}
           </Button>
+        </form>
+      </div>
 
-          <div className="flex items-center gap-2">
-            <Separator className="flex-1" />
-            <span className="font-mono text-xs text-muted-foreground">OR</span>
-            <Separator className="flex-1" />
-          </div>
-
-          <form className="space-y-3" onSubmit={handleRegister}>
-            <Input
-              placeholder="Display Name"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-              required
-            />
-            <Input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <Input
-              type="password"
-              placeholder="Password (min 6 chars)"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-            />
-            <Input
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              minLength={6}
-            />
-            <Button
-              className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
-              type="submit"
-              disabled={loading}
-            >
-              {loading ? "Creating account..." : "Register"}
-            </Button>
-          </form>
-
-          <p className="text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link href="/login" className="text-accent hover:underline font-medium">
-              Sign In
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
+      {/* Footer */}
+      <div className="text-center space-y-4">
+        <p className="text-sm text-white/60">
+          Already have an account?{" "}
+          <Link href="/login" className="text-[#FF4D2E] hover:text-[#FF4D2E]/80 font-medium transition-colors">
+            Sign In
+          </Link>
+        </p>
+        
+        <Link 
+          href="/" 
+          className="text-xs text-white/40 hover:text-white/60 transition-colors"
+        >
+          ← Back to home
+        </Link>
+      </div>
     </div>
   );
 }
