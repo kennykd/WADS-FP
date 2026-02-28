@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { auth } from "@/lib/firebase/firebase";
-import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,7 +22,7 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
 
   const createSession = async (idToken: string) => {
-    const res = await fetch("/api/session", {
+    const res = await fetch("/api/auth/firebase", {
       method: "POST",
       headers: { Authorization: `Bearer ${idToken}` },
     });
@@ -55,7 +59,11 @@ export default function RegisterPage() {
     }
     try {
       setLoading(true);
-      const result = await createUserWithEmailAndPassword(auth, email, password);
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
       const idToken = await result.user.getIdToken();
       await createSession(idToken);
       toast.success("Account created! Welcome 🎉");
@@ -64,9 +72,12 @@ export default function RegisterPage() {
     } catch (error: unknown) {
       const err = error as { code?: string; message?: string };
       let message = "Registration failed";
-      if (err?.code === "auth/email-already-in-use") message = "Email already in use";
-      else if (err?.code === "auth/weak-password") message = "Password too weak (min 6 chars)";
-      else if (err?.code === "auth/invalid-email") message = "Invalid email format";
+      if (err?.code === "auth/email-already-in-use")
+        message = "Email already in use";
+      else if (err?.code === "auth/weak-password")
+        message = "Password too weak (min 6 chars)";
+      else if (err?.code === "auth/invalid-email")
+        message = "Invalid email format";
       toast.error(message);
     } finally {
       setLoading(false);
@@ -101,7 +112,9 @@ export default function RegisterPage() {
             <div className="w-full border-t border-white/10" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="bg-[#1A2DAB] px-2 text-white/40 font-mono">OR</span>
+            <span className="bg-[#1A2DAB] px-2 text-white/40 font-mono">
+              OR
+            </span>
           </div>
         </div>
 
@@ -153,13 +166,16 @@ export default function RegisterPage() {
       <div className="text-center space-y-4">
         <p className="text-sm text-white/60">
           Already have an account?{" "}
-          <Link href="/login" className="text-[#FF4D2E] hover:text-[#FF4D2E]/80 font-medium transition-colors">
+          <Link
+            href="/login"
+            className="text-[#FF4D2E] hover:text-[#FF4D2E]/80 font-medium transition-colors"
+          >
             Sign In
           </Link>
         </p>
-        
-        <Link 
-          href="/" 
+
+        <Link
+          href="/"
           className="text-xs text-white/40 hover:text-white/60 transition-colors"
         >
           ← Back to home
