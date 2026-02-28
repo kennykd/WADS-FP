@@ -21,10 +21,12 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const createSession = async (idToken: string) => {
+  const createSession = async (idToken: string, displayName?: string) => {
     const res = await fetch("/api/auth/firebase", {
       method: "POST",
       headers: { Authorization: `Bearer ${idToken}` },
+      // Pass the displayName as a JSON string into the api endpoint
+      body: JSON.stringify({ displayName }),
     });
     if (!res.ok) throw new Error("Failed to create session");
   };
@@ -35,7 +37,7 @@ export default function RegisterPage() {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const idToken = await result.user.getIdToken();
-      await createSession(idToken);
+      await createSession(idToken, displayName);
       toast.success("Account created! Welcome 🎉");
       router.push("/dashboard");
       router.refresh();
@@ -65,7 +67,7 @@ export default function RegisterPage() {
         password,
       );
       const idToken = await result.user.getIdToken();
-      await createSession(idToken);
+      await createSession(idToken, displayName);
       toast.success("Account created! Welcome 🎉");
       router.push("/dashboard");
       router.refresh();

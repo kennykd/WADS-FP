@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -15,7 +15,12 @@ import {
   LogOut,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { mockUser } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 import {
@@ -41,6 +46,13 @@ const navItems = [
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
+interface CurrentUser {
+  id: string;
+  email: string;
+  name: string | null;
+  image: string | null;
+}
+
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
@@ -65,19 +77,47 @@ export function Sidebar() {
       router.push("/login");
       router.refresh();
     } catch (error: unknown) {
-      toast.error((error as {message?: string})?.message || "Logout failed");
+      toast.error((error as { message?: string })?.message || "Logout failed");
     } finally {
       setLogoutLoading(false);
     }
   };
 
-  const displayName = mockUser.displayName ?? mockUser.email;
-  const initials = (displayName ?? "U")
-    .split(" ")
-    .map((w) => w[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
+  // Fetches the displayName and Email from the database
+  const [user, setUser] = useState<CurrentUser | null>(null);
+  const avatarSrc = user?.image?.trim() || undefined;
+  // setIsLoading and useState so that it shows a loading message when fetching the user data, instead of displaying the defaule USER
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await fetch("/api/users/me", { method: "GET" });
+        if (!response.ok) return;
+        const data = (await response.json()) as CurrentUser;
+        setUser(data);
+        //console.log(user?.image);
+      } catch {
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+
+  const displayName = isLoading
+    ? "Loading profile..."
+    : (user?.name ?? user?.email);
+  const initials = isLoading
+    ? "..."
+    : (displayName ?? "U")
+        .split(" ")
+        .map((w) => w[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2);
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -85,18 +125,18 @@ export function Sidebar() {
         className={cn(
           "hidden lg:flex flex-col h-screen shrink-0 transition-all duration-150 ease-in-out",
           "bg-sidebar",
-          collapsed ? "w-20" : "w-72"
+          collapsed ? "w-20" : "w-72",
         )}
       >
         {/* User avatar section - fixed at top */}
         <div
           className={cn(
             "flex items-center gap-4 px-5 py-5 shrink-0",
-            collapsed && "justify-center px-0"
+            collapsed && "justify-center px-0",
           )}
         >
           <Avatar className="h-10 w-10 shrink-0">
-            <AvatarImage src={mockUser.avatarUrl} alt={displayName ?? ""} />
+            <AvatarImage src={avatarSrc} alt={displayName ?? ""} />
             <AvatarFallback className="bg-accent text-accent-foreground text-sm font-bold">
               {initials}
             </AvatarFallback>
@@ -107,7 +147,7 @@ export function Sidebar() {
                 {displayName}
               </p>
               <p className="font-mono text-xs text-sidebar-foreground/50 truncate">
-                {mockUser.email}
+                {user?.email}
               </p>
             </div>
           )}
@@ -116,7 +156,8 @@ export function Sidebar() {
         {/* Navigation - centered vertically */}
         <nav className="flex-1 flex flex-col justify-center py-4 space-y-1 px-3 overflow-y-auto">
           {navItems.map(({ href, label, icon: Icon }) => {
-            const isActive = pathname === href || pathname.startsWith(href + "/");
+            const isActive =
+              pathname === href || pathname.startsWith(href + "/");
             return (
               <Tooltip key={href}>
                 <TooltipTrigger asChild>
@@ -127,13 +168,15 @@ export function Sidebar() {
                       isActive
                         ? "bg-sidebar-primary text-sidebar-primary-foreground"
                         : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-                      collapsed && "justify-center px-0"
+                      collapsed && "justify-center px-0",
                     )}
                   >
                     <Icon
                       className={cn(
                         "h-5 w-5 shrink-0",
-                        isActive ? "text-sidebar-primary-foreground" : "text-sidebar-foreground/60"
+                        isActive
+                          ? "text-sidebar-primary-foreground"
+                          : "text-sidebar-foreground/60",
                       )}
                     />
                     {!collapsed && <span>{label}</span>}
@@ -158,14 +201,14 @@ export function Sidebar() {
                 className={cn(
                   "flex items-center gap-4 w-full rounded-lg px-4 py-3 text-sm font-medium transition-colors duration-150",
                   "text-sidebar-foreground/70 hover:bg-destructive/10 hover:text-destructive",
-                  collapsed && "justify-center px-0"
+                  collapsed && "justify-center px-0",
                 )}
               >
                 <LogOut className="h-5 w-5 shrink-0" />
                 {!collapsed && <span>Logout</span>}
               </button>
             </AlertDialogTrigger>
-            
+
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Logout Confirmation</AlertDialogTitle>
@@ -175,8 +218,8 @@ export function Sidebar() {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction 
-                  onClick={handleLogout} 
+                <AlertDialogAction
+                  onClick={handleLogout}
                   disabled={logoutLoading}
                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 >
@@ -192,7 +235,7 @@ export function Sidebar() {
             className={cn(
               "flex items-center justify-center w-full rounded-lg p-2 text-sidebar-foreground/50",
               "hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors duration-150",
-              collapsed && "px-0"
+              collapsed && "px-0",
             )}
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >

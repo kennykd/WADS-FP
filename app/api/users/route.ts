@@ -1,3 +1,5 @@
+// THIS FILE IS ONLY FOR SWAGGER TESTING, IT IS STILL HAVING THE HARDCODED DATA
+
 import { NextResponse } from "next/server";
 
 /**
