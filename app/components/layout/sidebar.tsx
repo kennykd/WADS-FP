@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -21,7 +21,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { mockUser } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 import {
   AlertDialog,
@@ -46,14 +45,14 @@ const navItems = [
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
-interface CurrentUser {
+type SidebarUser = {
   id: string;
-  email: string;
   name: string | null;
+  email: string;
   image: string | null;
-}
+};
 
-export function Sidebar() {
+export function Sidebar({ user }: { user: SidebarUser }) {
   const pathname = usePathname();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(() => {
@@ -83,41 +82,14 @@ export function Sidebar() {
     }
   };
 
-  // Fetches the displayName and Email from the database
-  const [user, setUser] = useState<CurrentUser | null>(null);
+  const displayName = user?.name ?? user?.email ?? "User";
   const avatarSrc = user?.image?.trim() || undefined;
-  // setIsLoading and useState so that it shows a loading message when fetching the user data, instead of displaying the defaule USER
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const response = await fetch("/api/users/me", { method: "GET" });
-        if (!response.ok) return;
-        const data = (await response.json()) as CurrentUser;
-        setUser(data);
-        //console.log(user?.image);
-      } catch {
-        setUser(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchCurrentUser();
-  }, []);
-
-  const displayName = isLoading
-    ? "Loading profile..."
-    : (user?.name ?? user?.email);
-  const initials = isLoading
-    ? "..."
-    : (displayName ?? "U")
-        .split(" ")
-        .map((w) => w[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2);
+  const initials = (displayName ?? "U")
+    .split(" ")
+    .map((w: string) => w[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
 
   return (
     <TooltipProvider delayDuration={0}>
