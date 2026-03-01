@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
   const authorization = req.headers.get("Authorization");
   let displayName: string | undefined;
 
-  // Parse the displayName from the request body
+  // EDIT: Parse the displayName from the request body
   try {
     const body = await req.json() as { displayName?: unknown };
     if (typeof body.displayName === "string") {
@@ -24,19 +24,26 @@ export async function POST(req: NextRequest) {
 
   try {
     const decodedToken = await adminAuth.verifyIdToken(idToken, true);
+    // EDIT: added three constants to help the process of checking if the username or image already exist in the database, even if it is not in the firebase console
+    const tokenName = decodedToken.name?.trim();
+    const tokenImage = decodedToken.picture?.trim();
+    // Take the displayName first then fallback to use firebase username (set username when a user registers using our website)
+    const userName = displayName || tokenName;
 
     // Upsert user to PostgreSQL Database
     // Fallback to use displayName if the user registers manually and not using google registration popups
     const user = await prisma.user.upsert({
       where: { email: decodedToken.email! },
+      // EDIT: If userName or image from the firebase console exist, update it
+      // (THIS IS IMPORTANT) but if it does not exist, do not update, keeping the values in the database
       update: {
-        name: decodedToken.name || displayName || null,
-        image: decodedToken.picture || null,
+        ...(userName ? { name: userName } : {}),
+        ...(tokenImage ? { image: tokenImage } : {}),
       },
       create: {
         email: decodedToken.email!,
-        name: decodedToken.name || displayName || null,
-        image: decodedToken.picture || null,
+        name: userName || null,
+        image: tokenImage || null,
         emailVerified: decodedToken.email_verified || false,
       },
     });
