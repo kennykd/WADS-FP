@@ -3,6 +3,10 @@
  * Frontend-only types for UI components and mock data
  */
 
+export const TASK_STATUSES = ["todo", "in-progress", "done"] as const;
+export type TaskStatus = (typeof TASK_STATUSES)[number];
+export type ReminderFrequency = "daily" | "every-3-days" | "weekly" | "none"; 
+
 export interface Task {
   /** Unique identifier for the task */
   id: string;
@@ -15,11 +19,11 @@ export interface Task {
   /** Priority rating from 1-5, supports 0.5 increments (e.g., 2.5, 3.5) */
   priority: number;
   /** Current status of the task */
-  status: "todo" | "in-progress" | "done";
+  status: TaskStatus;
   /** Optional file names for attachments (visual only, no actual upload) */
   attachments?: string[];
   /** Reminder frequency/timing */
-  reminder?: "daily" | "every-3-days" | "weekly" | "none";
+  reminder?: ReminderFrequency;
   /** Timestamp when task was created */
   createdAt: Date;
   /** Timestamp when task was completed (if applicable) */
@@ -159,7 +163,7 @@ export interface ProjectTask {
   /** Optional attachments */
   attachments?: string[];
   /** Reminder frequency/timing */
-  reminder?: "daily" | "every-3-days" | "weekly" | "none";
+  reminder?: ReminderFrequency;
 
   /** Priority level */
   priority: ProjectTaskPriority;

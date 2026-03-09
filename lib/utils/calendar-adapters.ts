@@ -1,4 +1,4 @@
-import { CalendarEvent } from "@/lib/types";
+import { CalendarEvent } from "@/types";
 import { format } from "date-fns";
 import type { EventInput } from "@fullcalendar/core";
 

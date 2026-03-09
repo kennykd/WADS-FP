@@ -33,7 +33,7 @@ import {
   ProjectTask,
   ProjectTaskPriority,
   ProjectTaskStatus,
-} from "@/lib/types";
+} from "@/types";
 import { cn } from "@/lib/utils";
 
 import {

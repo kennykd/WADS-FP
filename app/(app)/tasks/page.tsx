@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { TaskCard } from "@/app/components/tasks/task-card";
 import { mockTasks } from "@/lib/mock-data";
-import { Task } from "@/lib/types";
+import { Task } from "@/types";
 import { Plus } from "lucide-react";
 
 type FilterTab = "all" | "todo" | "in-progress" | "done";

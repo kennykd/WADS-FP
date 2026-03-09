@@ -12,7 +12,7 @@ import {
   UserProfile,
   Notification,
   Project,
-} from "@/lib/types";
+} from "@/types";
 
 // Helper functions for relative dates
 const now = new Date();

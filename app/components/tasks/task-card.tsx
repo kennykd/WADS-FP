@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { StarRating } from "@/app/components/common/star-rating";
 import { ChevronRight } from "lucide-react";
-import { Task } from "@/lib/types";
+import { Task } from "@/types";
 import { cn } from "@/lib/utils";
 import { format, isPast, isToday, isTomorrow } from "date-fns";
 
