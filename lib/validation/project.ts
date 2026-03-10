@@ -74,7 +74,23 @@ export const updateProjectTaskSchema = z.object({
   .optional(),
 });
 
+export const addProjectMemberSchema = z.object({
+  id: z.string()
+  .min(1, 'Member ID is required'),
+  name: z.string()
+  .min(1, 'Member name is required'),
+  handle: z.string()
+  .optional(),
+  role: z.enum(['owner', 'moderator', 'member']),
+});
+
+export const updateProjectMemberSchema = z.object({
+  role: z.enum(['owner', 'moderator', 'member']),
+});
+
 export type CreateProjectInput = z.infer<typeof createProjectSchema>;
 export type UpdateProjectInput = z.infer<typeof updateProjectSchema>;
 export type CreateProjectTaskInput = z.infer<typeof createProjectTaskSchema>;
 export type UpdateProjectTaskInput = z.infer<typeof updateProjectTaskSchema>;
+export type AddProjectMemberInput = z.infer<typeof addProjectMemberSchema>;
+export type UpdateProjectMemberInput = z.infer<typeof updateProjectMemberSchema>;
