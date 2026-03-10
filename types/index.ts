@@ -3,8 +3,7 @@
  * Frontend-only types for UI components and mock data
  */
 
-export const TASK_STATUSES = ["todo", "in-progress", "done"] as const;
-export type TaskStatus = (typeof TASK_STATUSES)[number];
+export type TaskStatus = "todo" | "in-progress" | "done";
 export type ReminderFrequency = "daily" | "every-3-days" | "weekly" | "none"; 
 
 export interface Task {

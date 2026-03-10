@@ -42,7 +42,7 @@ export async function POST(request: Request) {
       id: crypto.randomUUID(),
       title,
       description: description ?? '',
-      deadline: new Date(deadline),
+      deadline,
       status: status ?? 'todo',
       priority: priority ?? 3,
       attachments: attachments ?? [],
