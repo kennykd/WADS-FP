@@ -19,7 +19,7 @@ export async function getSession(): Promise<SessionUser | null> {
 
   try {
     // Try verifying as Firebase token
-    const decodedToken: DecodedIdToken = await adminAuth.verifyIdToken(session, true);
+    const decodedToken: DecodedIdToken = await adminAuth.verifyIdToken(session);
 
     // Search for user in database
     const user = await prisma.user.findUnique({
