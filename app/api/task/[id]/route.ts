@@ -3,29 +3,167 @@ import { z } from 'zod';
 import { updateTaskSchema } from '../../../../lib/validation/task';
 import { tasks } from '../route';
 
+/**
+ * @swagger
+ * /api/task/{id}:
+ *   patch:
+ *     summary: Update a task by ID
+ *     tags:
+ *       - Tasks
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: The unique ID of the task to update
+ *         example: "123e4567-e89b-12d3-a456-426614174000"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             minProperties: 1
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 minLength: 1
+ *                 maxLength: 100
+ *                 description: Updated name of the task
+ *                 example: Study for math exam (updated)
+ *               description:
+ *                 type: string
+ *                 description: Updated description
+ *                 example: Cover chapters 1-7 now
+ *               deadline:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Updated deadline (must be in the future)
+ *                 example: "2026-05-01T12:00:00.000Z"
+ *               status:
+ *                 type: string
+ *                 enum: [todo, in-progress, done]
+ *                 description: Updated status
+ *                 example: in-progress
+ *               priority:
+ *                 type: number
+ *                 minimum: 0.5
+ *                 maximum: 5
+ *                 description: Updated priority rating
+ *                 example: 4
+ *               attachments:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Updated list of attachment file names
+ *                 example: ["notes.pdf", "slides.pptx"]
+ *               reminder:
+ *                 type: string
+ *                 enum: [daily, every-3-days, weekly, none]
+ *                 description: Updated reminder frequency
+ *                 example: weekly
+ *     responses:
+ *       200:
+ *         description: Task updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Task updated successfully
+ *                 task:
+ *                   $ref: '#/components/schemas/Task'
+ *       400:
+ *         description: Validation failed, invalid JSON, or no fields provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Validation failed
+ *                 errors:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *       404:
+ *         description: Task not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Task not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error updating task
+ *   delete:
+ *     summary: Delete a task by ID
+ *     tags:
+ *       - Tasks
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: The unique ID of the task to delete
+ *         example: "123e4567-e89b-12d3-a456-426614174000"
+ *     responses:
+ *       200:
+ *         description: Task deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Task deleted successfully
+ *       404:
+ *         description: Task not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Task not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error deleting task
+ */
+
 type RouteContext = {
   params: Promise<{
     id: string;
   }>;
 };
-
-export async function DELETE(_: Request, context: RouteContext) {
-  try {
-    const { id } = await context.params;
-
-    const index = tasks.findIndex((task) => task.id === id);
-
-    if (index === -1) {
-      return NextResponse.json({ message: 'Task not found' }, { status: 404 });
-    };
-
-    tasks.splice(index, 1);
-
-    return NextResponse.json({ message: 'Task deleted successfully' }, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ message: 'Error deleting task', error }, { status: 500 });
-  }
-}
 
 export async function PATCH(request: Request, context: RouteContext) {
   try {
@@ -73,5 +211,23 @@ export async function PATCH(request: Request, context: RouteContext) {
     );
   } catch (error) {
     return NextResponse.json({ message: 'Error updating task', error }, { status: 500 });
+  }
+}
+
+export async function DELETE(_: Request, context: RouteContext) {
+  try {
+    const { id } = await context.params;
+
+    const index = tasks.findIndex((task) => task.id === id);
+
+    if (index === -1) {
+      return NextResponse.json({ message: 'Task not found' }, { status: 404 });
+    };
+
+    tasks.splice(index, 1);
+
+    return NextResponse.json({ message: 'Task deleted successfully' }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ message: 'Error deleting task', error }, { status: 500 });
   }
 }
