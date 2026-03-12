@@ -1,57 +1,92 @@
-// THIS FILE IS ONLY FOR SWAGGER TESTING, IT IS STILL HAVING THE HARDCODED DATA
-
 import { NextResponse } from "next/server";
+import { getSession } from "@/lib/firebase/auth";
+import { prisma } from "@/lib/prisma";
 
 /**
  * @swagger
  * /api/users:
  *   get:
- *     summary: Get all users
+ *     summary: Get all users (safe public fields only)
+ *     description: Returns a list of all registered users. Intended for project member search and discovery. Requires authentication.
+ *     tags:
+ *       - Users
+ *     security:
+ *       - cookieAuth: []
  *     responses:
  *       200:
- *         description: List of users
- *   post:
- *     summary: Create new user 
- *     responses:
- *       201:
- *         description: User created
- *   put:
- *     summary: Update user
- *     responses:
- *       200:
- *         description: User updated
- *   delete:
- *     summary: Delete user
- *     responses:
- *       200:
- *         description: User deleted
+ *         description: Users retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Users retrieved successfully
+ *                 users:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/UserPublic'
+ *       401:
+ *         description: Unauthorized — no valid session
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Unauthorized
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Failed to retrieve users
  */
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     UserPublic:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "clxyz123abc"
+ *         name:
+ *           type: string
+ *           nullable: true
+ *           example: "Barry Allen"
+ *         image:
+ *           type: string
+ *           nullable: true
+ *           example: "https://example.com/avatar.png"
+ */
 export async function GET() {
-    return NextResponse.json([
-        {id:1, name:"barry"},
-        {id:2, name:"rafie"},
-        {id:3, name:"kenny"}
-    ]);
-}
+  const session = await getSession();
 
-export async function POST() {
-    return NextResponse.json(
-        { message: "User created successfully", data: { id: 4, name: "superman" } },
-        { status: 201 }
-    );
-}
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-export async function PUT() {
-    return NextResponse.json({
-        message: "User updated successfully",
-        data: { id: 1, name: "barry-updated" }
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        image: true,
+      },
     });
-}
 
-export async function DELETE() {
-    return NextResponse.json({
-        message: "User deleted successfully",
-        data: { id: 1 }
-    });
+    return NextResponse.json({ message: "Users retrieved successfully", users }, { status: 200 });
+  } catch (error) {
+    console.error("[api/users] Failed to retrieve users:", error);
+    return NextResponse.json({ error: "Failed to retrieve users" }, { status: 500 });
+  }
 }

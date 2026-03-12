@@ -4,16 +4,16 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   const authorization = req.headers.get("Authorization");
-  let displayName: string | undefined;
+  let name: string | undefined;
 
-  // EDIT: Parse the displayName from the request body
+  // Parse the name from the request body (sent by manual registration, not Google sign-in)
   try {
-    const body = await req.json() as { displayName?: unknown };
-    if (typeof body.displayName === "string") {
-      displayName = body.displayName.trim() || undefined;
+    const body = await req.json() as { name?: unknown };
+    if (typeof body.name === "string") {
+      name = body.name.trim() || undefined;
     }
   } catch {
-    displayName = undefined;
+    name = undefined;
   }
 
   if (!authorization?.startsWith("Bearer ")) {
@@ -24,26 +24,26 @@ export async function POST(req: NextRequest) {
 
   try {
     const decodedToken = await adminAuth.verifyIdToken(idToken);
-    // EDIT: added three constants to help the process of checking if the username or image already exist in the database, even if it is not in the firebase console
-    const tokenName = decodedToken.name?.trim();
-    const tokenImage = decodedToken.picture?.trim();
-    // Take the displayName first then fallback to use firebase username (set username when a user registers using our website)
-    const userName = displayName || tokenName;
+    // firebaseName/firebaseImage: sourced from the Firebase token (Google sign-in profile data),
+    // may differ from what is stored in the database if the user updated their profile here.
+    const firebaseName = decodedToken.name?.trim();
+    const firebaseImage = decodedToken.picture?.trim();
+    // Prefer the name sent in the request body (manual registration), fall back to Firebase token name
+    name = name || firebaseName;
 
-    // Upsert user to PostgreSQL Database
-    // Fallback to use displayName if the user registers manually and not using google registration popups
+    // Upsert user to PostgreSQL database.
+    // If firebaseName or firebaseImage exist on the token, sync them to the DB.
+    // (THIS IS IMPORTANT) If they are absent, keep whatever is already stored — never overwrite with null.
     const user = await prisma.user.upsert({
       where: { email: decodedToken.email! },
-      // EDIT: If userName or image from the firebase console exist, update it
-      // (THIS IS IMPORTANT) but if it does not exist, do not update, keeping the values in the database
       update: {
-        ...(userName ? { name: userName } : {}),
-        ...(tokenImage ? { image: tokenImage } : {}),
+        ...(name ? { name } : {}),
+        ...(firebaseImage ? { image: firebaseImage } : {}),
       },
       create: {
         email: decodedToken.email!,
-        name: userName || null,
-        image: tokenImage || null,
+        name: name || null,
+        image: firebaseImage || null,
         emailVerified: decodedToken.email_verified || false,
       },
     });
