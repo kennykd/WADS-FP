@@ -25,7 +25,7 @@ import { StarRating } from "@/app/components/common/star-rating";
 import { toast } from "sonner";
 import { StudySessionPrompt } from "@/app/components/tasks/study-session-prompt";
 import { format } from "date-fns";
-import { CalendarIcon, Paperclip, X } from "lucide-react";
+import { CalendarIcon, Paperclip, Sparkles, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function TaskForm() {
@@ -83,7 +83,7 @@ export default function TaskForm() {
         </div>
 
         <Card className="bg-card/80 backdrop-blur-sm border-border/50">
-          <CardHeader className="border-t-2 border-accent rounded-t-xl pb-2">
+          <CardHeader className="pb-2">
             <CardTitle className="font-display text-lg">Task Details</CardTitle>
           </CardHeader>
           <CardContent>
@@ -182,6 +182,26 @@ export default function TaskForm() {
                     />
                   </label>
                 )}
+              </div>
+
+              <div className="flex items-center justify-between rounded-lg border border-accent/20 bg-accent/5 px-4 py-3">
+                <div>
+                  <p className="text-sm font-medium text-foreground">
+                    AI Suggestions
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Get task ideas based on your title and attachments.
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="gap-1.5 font-mono text-xs border-accent/40 text-accent hover:bg-accent/10 hover:text-accent"
+                  onClick={() => toast.info("AI suggestions coming soon!")}
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                  AI Suggestions
+                </Button>
               </div>
 
               <div className="space-y-1.5">

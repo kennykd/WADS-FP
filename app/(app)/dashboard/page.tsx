@@ -9,7 +9,7 @@ export default function DashboardPage() {
     <div className="p-6 space-y-6">
       <div>
         <h1 className="font-display text-3xl font-extrabold tracking-tight text-foreground">
-          COMMAND CENTER
+          DASHBOARD
         </h1>
         <p className="font-mono text-xs text-muted-foreground mt-1 tracking-widest">
           SCHOLAR&apos;S PLOT — DASHBOARD

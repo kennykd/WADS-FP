@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -142,6 +142,7 @@ function CircularTimer({
 
 export default function StudySessionPage() {
   const params = useParams();
+  const router = useRouter();
   const rawId = params?.id;
   const sessionId = Array.isArray(rawId) ? rawId[0] : (rawId ?? "");
   const [sessions, setSessions] = useState<StudySessionLocal[]>([]);
@@ -233,13 +234,10 @@ export default function StudySessionPage() {
     playTone(520, 300);
     setRunning(false);
     setPhase("idle");
-    setSessions((prev) =>
-      prev.map((item) =>
-        item.id === session.id ? { ...item, status: "completed" } : item,
-      ),
-    );
+    setSessions((prev) => prev.filter((item) => item.id !== session.id));
     toast.success(`Session complete: ${session.title}`);
-  }, [totalSecondsRemaining, session]);
+    router.push("/study");
+  }, [totalSecondsRemaining, session, router]);
 
   const toggleRunning = () => {
     if (!session) return;
@@ -269,12 +267,9 @@ export default function StudySessionPage() {
     if (!session) return;
     setRunning(false);
     setPhase("idle");
-    setSessions((prev) =>
-      prev.map((item) =>
-        item.id === session.id ? { ...item, status: "completed" } : item,
-      ),
-    );
+    setSessions((prev) => prev.filter((item) => item.id !== session.id));
     toast.success(`Session complete: ${session.title}`);
+    router.push("/study");
   };
 
   if (!loaded) {
@@ -395,7 +390,7 @@ export default function StudySessionPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              {session.attachments.length ? (
+              {session.attachments?.length ? (
                 session.attachments.map((file, index) => (
                   <div
                     key={`${file}-${index}`}

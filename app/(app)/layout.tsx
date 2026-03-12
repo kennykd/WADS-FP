@@ -1,5 +1,6 @@
 import { Sidebar } from "@/app/components/layout/sidebar";
 import { BottomTabBar } from "@/app/components/layout/bottom-tab-bar";
+import { ChatBot } from "@/app/components/ai/chat-bot";
 import { getSession } from "@/lib/firebase/auth";
 import { redirect } from "next/navigation";
 
@@ -29,6 +30,9 @@ export default async function AppLayout({
 
       {/* Mobile bottom tab bar */}
       <BottomTabBar />
+
+      {/* AI chatbot floating widget */}
+      <ChatBot />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { mockAnalytics } from "@/lib/mock-data";
 import { Flame, CheckCircle2, Clock, Target } from "lucide-react";
@@ -21,6 +22,9 @@ import {
 const DONUT_COLORS = ["#22c55e", "#3b82f6", "var(--accent)", "#6b7280"];
 
 export default function AnalyticsPage() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const {
     completionStats,
     timeBySubject,
@@ -71,6 +75,8 @@ export default function AnalyticsPage() {
     },
   ];
   void totalTasksCompleted;
+
+  if (!mounted) return null;
 
   return (
     <div className="p-6 space-y-6">

@@ -17,7 +17,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { mockStudySessions } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { ArrowLeft, CalendarIcon, Paperclip, X } from "lucide-react";
+import { ArrowLeft, CalendarIcon, Paperclip, Sparkles, X } from "lucide-react";
 import { format } from "date-fns";
 
 type StudySessionLocal = {
@@ -161,7 +161,7 @@ export default function StudyNewPage() {
       </div>
 
       <Card className="bg-card/80 backdrop-blur-sm border-border/50">
-        <CardHeader className="border-t-2 border-accent rounded-t-xl pb-2">
+        <CardHeader className="pb-2">
           <CardTitle className="font-display text-lg">
             Session Details
           </CardTitle>
@@ -318,6 +318,26 @@ export default function StudyNewPage() {
                   />
                 </label>
               )}
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg border border-accent/20 bg-accent/5 px-4 py-3">
+              <div>
+                <p className="text-sm font-medium text-foreground">
+                  AI Suggestions
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Get session ideas based on your title and attachments.
+                </p>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                className="gap-1.5 font-mono text-xs border-accent/40 text-accent hover:bg-accent/10 hover:text-accent"
+                onClick={() => toast.info("AI suggestions coming soon!")}
+              >
+                <Sparkles className="h-3.5 w-3.5" />
+                AI Suggestions
+              </Button>
             </div>
 
             <div className="flex gap-3 pt-2">

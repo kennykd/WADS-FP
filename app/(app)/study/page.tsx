@@ -138,16 +138,13 @@ export default function StudyPage() {
       focusMinutes: Math.max(1, Number(quickFocusMinutes) || 25),
       breakMinutes: Math.max(1, Number(quickBreakMinutes) || 5),
       totalMinutes: Math.max(1, Number(quickTotalMinutes) || 60),
-      status: "planned",
+      status: "in-progress",
       createdAt: new Date().toISOString(),
       isTimerOnly: true,
     };
 
     setSessions((prev) => [newSession, ...prev]);
-    setQuickTitle("");
-    setQuickFocusMinutes(25);
-    setQuickBreakMinutes(5);
-    setQuickTotalMinutes(60);
+    router.push(`/study/${newSession.id}`);
   };
 
   return (
@@ -209,7 +206,7 @@ export default function StudyPage() {
                         <Badge variant="secondary" className="text-[10px]">
                           Total {session.totalMinutes}m
                         </Badge>
-                        {session.attachments.length > 0 && (
+                        {(session.attachments?.length ?? 0) > 0 && (
                           <Badge variant="secondary" className="text-[10px]">
                             {session.attachments.length} attachment
                             {session.attachments.length > 1 ? "s" : ""}
