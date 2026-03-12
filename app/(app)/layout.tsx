@@ -14,7 +14,7 @@ export default async function AppLayout({
 
   // Redirect if the user data is not found in the database
   if (!user) {
-    redirect("/login");
+    redirect("/api/auth/logout");
   }
 
   return (

@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+// Pages where a logged-in user should be bounced to /dashboard
+const AUTH_PAGES = ["/login", "/register"];
+// All paths that don't require authentication (includes API routes)
 const PUBLIC_PATHS = ["/login", "/register", "/api/auth"];
 const PROTECTED_PREFIXES = [
   "/dashboard",
@@ -56,8 +59,9 @@ export function proxy(request: NextRequest) {
 
   // Bot control
   const ua = request.headers.get("user-agent") ?? "";
-  const isBotBlocked =
-    !ua || BLOCKED_UA_PATTERNS.some((p) => ua.toLowerCase().includes(p));
+  const isBotBlocked = BLOCKED_UA_PATTERNS.some((p) =>
+    ua.toLowerCase().includes(p),
+  );
   if (isBotBlocked) {
     return new NextResponse("Forbidden", { status: 403 });
   }
@@ -67,7 +71,8 @@ export function proxy(request: NextRequest) {
   const isLoggedIn = Boolean(session);
 
   const isPublicPath = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
-  if (isLoggedIn && isPublicPath) {
+  const isAuthPage = AUTH_PAGES.some((p) => pathname.startsWith(p));
+  if (isLoggedIn && isAuthPage) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
