@@ -2,6 +2,71 @@ import { NextRequest, NextResponse } from "next/server";
 import { adminAuth } from "@/lib/firebase/firebase-admin";
 import { prisma } from "@/lib/prisma";
 
+/**
+ * @swagger
+ * /api/auth/firebase:
+ *   post:
+ *     summary: Exchange a Firebase ID token for a session cookie
+ *     tags:
+ *       - Auth
+ *     description: >
+ *       Verifies the provided Firebase ID token, upserts the user into the
+ *       PostgreSQL database, and sets an httpOnly session cookie. Called
+ *       automatically after a successful Firebase login (email/password or Google).
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Firebase ID token in the format "Bearer <idToken>"
+ *         example: "Bearer eyJhbGciOiJSUzI1NiJ9..."
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               displayName:
+ *                 type: string
+ *                 description: >
+ *                   Optional display name for the user. Takes priority over the
+ *                   name stored in the Firebase token. Used when registering
+ *                   with email/password where Firebase has no display name set.
+ *                 example: "Alex Scholar"
+ *     responses:
+ *       200:
+ *         description: Authentication successful — session cookie is set
+ *         headers:
+ *           Set-Cookie:
+ *             description: httpOnly session cookie containing the Firebase ID token
+ *             schema:
+ *               type: string
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: success
+ *                 userId:
+ *                   type: string
+ *                   description: The user's database ID
+ *                   example: "clxyz123abc"
+ *       401:
+ *         description: Missing, malformed, or invalid Firebase ID token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Unauthorized
+ */
+
 export async function POST(req: NextRequest) {
   const authorization = req.headers.get("Authorization");
   let displayName: string | undefined;
