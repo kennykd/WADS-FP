@@ -3,6 +3,110 @@ import { z } from 'zod';
 import { addProjectMemberSchema } from '../../../../../lib/validation/project';
 import { projects } from '../../route';
 
+/**
+ * @swagger
+ * /api/project/{id}/member:
+ *   post:
+ *     summary: Add a member to a project
+ *     tags:
+ *       - Projects
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: The unique ID of the project
+ *         example: "123e4567-e89b-12d3-a456-426614174000"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *               - name
+ *               - role
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 minLength: 1
+ *                 description: The member's user ID
+ *                 example: "member-008"
+ *               name:
+ *                 type: string
+ *                 minLength: 1
+ *                 example: "Jordan Blake"
+ *               handle:
+ *                 type: string
+ *                 example: "jordan@scholar.plot"
+ *               role:
+ *                 type: string
+ *                 enum: [owner, moderator, member]
+ *                 example: member
+ *     responses:
+ *       201:
+ *         description: Member added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Member added successfully
+ *                 member:
+ *                   $ref: '#/components/schemas/ProjectMember'
+ *       400:
+ *         description: Validation failed or invalid JSON
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Validation failed
+ *                 errors:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *       404:
+ *         description: Project not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Project not found
+ *       409:
+ *         description: Member already in project
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Member already in project
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error adding member
+ */
+
 type RouteContext = {
   params: Promise<{
     id: string;

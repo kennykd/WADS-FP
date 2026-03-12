@@ -3,6 +3,154 @@ import { z } from 'zod';
 import { updateProjectMemberSchema } from '../../../../../../lib/validation/project';
 import { projects } from '../../../route';
 
+/**
+ * @swagger
+ * /api/project/{id}/member/{memberId}:
+ *   patch:
+ *     summary: Update a member's role in a project
+ *     tags:
+ *       - Projects
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: The unique ID of the project
+ *         example: "123e4567-e89b-12d3-a456-426614174000"
+ *       - in: path
+ *         name: memberId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The unique ID of the member to update
+ *         example: "member-002"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - role
+ *             properties:
+ *               role:
+ *                 type: string
+ *                 enum: [owner, moderator, member]
+ *                 example: moderator
+ *     responses:
+ *       200:
+ *         description: Member updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Member updated successfully
+ *                 member:
+ *                   $ref: '#/components/schemas/ProjectMember'
+ *       400:
+ *         description: Validation failed or invalid JSON
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Validation failed
+ *                 errors:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *       404:
+ *         description: Project or member not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Member not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error updating member
+ *   delete:
+ *     summary: Remove a member from a project
+ *     tags:
+ *       - Projects
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: The unique ID of the project
+ *         example: "123e4567-e89b-12d3-a456-426614174000"
+ *       - in: path
+ *         name: memberId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The unique ID of the member to remove
+ *         example: "member-003"
+ *     responses:
+ *       200:
+ *         description: Member removed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Member removed successfully
+ *       403:
+ *         description: Cannot remove the project owner
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Cannot remove the project owner
+ *       404:
+ *         description: Project or member not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Member not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Error removing member
+ */
+
 type RouteContext = {
   params: Promise<{
     id: string;
