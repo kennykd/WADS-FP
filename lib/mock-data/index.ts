@@ -27,7 +27,7 @@ const hoursFromNow = (n: number) =>
 
 export const mockTasks: Task[] = [
   {
-    id: "task-001",
+    id: "00000000-0000-4000-8000-000000000001",
     title: "Calculus II Problem Set 5",
     description:
       "Complete exercises 1-15 from Chapter 5. Focus on integration by parts and partial fractions.",
@@ -39,7 +39,7 @@ export const mockTasks: Task[] = [
     createdAt: daysFromNow(-7),
   },
   {
-    id: "task-002",
+    id: "00000000-0000-4000-8000-000000000002",
     title: "Data Structures Assignment 3",
     description:
       "Implement binary search tree with insert, delete, and search operations. Include unit tests.",
@@ -51,7 +51,7 @@ export const mockTasks: Task[] = [
     createdAt: daysFromNow(-5),
   },
   {
-    id: "task-003",
+    id: "00000000-0000-4000-8000-000000000003",
     title: "Physics Lab Report",
     description: "Write lab report for experiment on simple harmonic motion.",
     deadline: daysFromNow(1),
@@ -61,7 +61,7 @@ export const mockTasks: Task[] = [
     createdAt: daysFromNow(-10),
   },
   {
-    id: "task-004",
+    id: "00000000-0000-4000-8000-000000000004",
     title: "English Composition Essay",
     description:
       'Write 2000-word essay on "The Role of Technology in Modern Society". Include at least 5 academic sources.',
@@ -72,7 +72,7 @@ export const mockTasks: Task[] = [
     createdAt: daysFromNow(-3),
   },
   {
-    id: "task-005",
+    id: "00000000-0000-4000-8000-000000000005",
     title: "Web Development Project Milestone 1",
     description:
       "Complete frontend design and setup. Deploy to staging environment.",
@@ -84,7 +84,7 @@ export const mockTasks: Task[] = [
     createdAt: daysFromNow(-14),
   },
   {
-    id: "task-006",
+    id: "00000000-0000-4000-8000-000000000006",
     title: "Linear Algebra Midterm Review",
     description:
       "Review chapters 1-4. Practice matrix operations and eigenvalues.",
@@ -95,7 +95,7 @@ export const mockTasks: Task[] = [
     createdAt: daysFromNow(-4),
   },
   {
-    id: "task-007",
+    id: "00000000-0000-4000-8000-000000000007",
     title: "Database Systems Project",
     description:
       "Design and implement relational database schema for e-commerce platform.",
@@ -107,7 +107,7 @@ export const mockTasks: Task[] = [
     createdAt: daysFromNow(-21),
   },
   {
-    id: "task-008",
+    id: "00000000-0000-4000-8000-000000000008",
     title: "Operating Systems Assignment 2",
     description:
       "Implement process scheduling algorithms: FCFS, SJF, and Round Robin.",
@@ -119,7 +119,7 @@ export const mockTasks: Task[] = [
     createdAt: daysFromNow(-12),
   },
   {
-    id: "task-009",
+    id: "00000000-0000-4000-8000-000000000009",
     title: "Discrete Mathematics Problem Set",
     description: "Complete graph theory and combinatorics problems.",
     deadline: daysFromNow(6),
@@ -129,7 +129,7 @@ export const mockTasks: Task[] = [
     createdAt: daysFromNow(-2),
   },
   {
-    id: "task-010",
+    id: "00000000-0000-4000-8000-000000000010",
     title: "Software Engineering Documentation",
     description: "Write system design document and API specifications.",
     deadline: daysFromNow(8),
@@ -146,21 +146,21 @@ export const mockTasks: Task[] = [
 
 export const mockStudySessions: StudySession[] = [
   {
-    id: "session-001",
-    taskId: "task-001",
+    id: "00000000-0000-4000-8000-000000000101",
+    taskId: "00000000-0000-4000-8000-000000000001",
     taskTitle: "Calculus II Problem Set 5",
     duration: 25,
     breakDuration: 5,
     checklist: [
       {
-        id: "check-001",
+        id: "00000000-0000-4000-8000-000000000201",
         text: "Review lecture notes on integration by parts",
         completed: true,
       },
-      { id: "check-002", text: "Complete exercises 1-5", completed: true },
-      { id: "check-003", text: "Complete exercises 6-10", completed: false },
+      { id: "00000000-0000-4000-8000-000000000202", text: "Complete exercises 1-5", completed: true },
+      { id: "00000000-0000-4000-8000-000000000203", text: "Complete exercises 6-10", completed: false },
       {
-        id: "check-004",
+        id: "00000000-0000-4000-8000-000000000204",
         text: "Review partial fractions method",
         completed: false,
       },
@@ -169,47 +169,47 @@ export const mockStudySessions: StudySession[] = [
     scheduledAt: hoursFromNow(1),
   },
   {
-    id: "session-002",
-    taskId: "task-002",
+    id: "00000000-0000-4000-8000-000000000102",
+    taskId: "00000000-0000-4000-8000-000000000002",
     taskTitle: "Data Structures Assignment 3",
     duration: 50,
     breakDuration: 10,
     checklist: [
       {
-        id: "check-005",
+        id: "00000000-0000-4000-8000-000000000205",
         text: "Implement BST insert operation",
         completed: true,
       },
       {
-        id: "check-006",
+        id: "00000000-0000-4000-8000-000000000206",
         text: "Implement BST delete operation",
         completed: false,
       },
       {
-        id: "check-007",
+        id: "00000000-0000-4000-8000-000000000207",
         text: "Implement BST search operation",
         completed: false,
       },
-      { id: "check-008", text: "Write unit tests", completed: false },
+      { id: "00000000-0000-4000-8000-000000000208", text: "Write unit tests", completed: false },
     ],
     status: "pending",
     scheduledAt: daysFromNow(1),
   },
   {
-    id: "session-003",
-    taskId: "task-003",
+    id: "00000000-0000-4000-8000-000000000103",
+    taskId: "00000000-0000-4000-8000-000000000003",
     taskTitle: "Physics Lab Report",
     duration: 45,
     breakDuration: 10,
     checklist: [
-      { id: "check-009", text: "Organize experimental data", completed: false },
+      { id: "00000000-0000-4000-8000-000000000209", text: "Organize experimental data", completed: false },
       {
-        id: "check-010",
+        id: "00000000-0000-4000-8000-000000000210",
         text: "Write introduction and methodology",
         completed: false,
       },
       {
-        id: "check-011",
+        id: "00000000-0000-4000-8000-000000000211",
         text: "Analyze results and create graphs",
         completed: false,
       },
@@ -218,20 +218,20 @@ export const mockStudySessions: StudySession[] = [
     scheduledAt: daysFromNow(1),
   },
   {
-    id: "session-004",
-    taskId: "task-004",
+    id: "00000000-0000-4000-8000-000000000104",
+    taskId: "00000000-0000-4000-8000-000000000004",
     taskTitle: "English Composition Essay",
     duration: 60,
     breakDuration: 15,
     checklist: [
       {
-        id: "check-012",
+        id: "00000000-0000-4000-8000-000000000212",
         text: "Research and gather sources",
         completed: false,
       },
-      { id: "check-013", text: "Create outline", completed: false },
-      { id: "check-014", text: "Write first draft", completed: false },
-      { id: "check-015", text: "Revise and proofread", completed: false },
+      { id: "00000000-0000-4000-8000-000000000213", text: "Create outline", completed: false },
+      { id: "00000000-0000-4000-8000-000000000214", text: "Write first draft", completed: false },
+      { id: "00000000-0000-4000-8000-000000000215", text: "Revise and proofread", completed: false },
     ],
     status: "pending",
     scheduledAt: daysFromNow(2),
@@ -245,121 +245,121 @@ export const mockStudySessions: StudySession[] = [
 export const mockCalendarEvents: CalendarEvent[] = [
   // Task deadlines
   {
-    id: "event-001",
+    id: "00000000-0000-4000-8000-000000000301",
     title: "Calculus II Problem Set 5 Due",
     type: "task-deadline",
     date: daysFromNow(2),
     color: "#FF4D2E",
-    taskId: "task-001",
+    taskId: "00000000-0000-4000-8000-000000000001",
   },
   {
-    id: "event-002",
+    id: "00000000-0000-4000-8000-000000000302",
     title: "Data Structures Assignment 3 Due",
     type: "task-deadline",
     date: daysFromNow(3),
     color: "#FF4D2E",
-    taskId: "task-002",
+    taskId: "00000000-0000-4000-8000-000000000002",
   },
   {
-    id: "event-003",
+    id: "00000000-0000-4000-8000-000000000303",
     title: "Physics Lab Report Due",
     type: "task-deadline",
     date: daysFromNow(1),
     color: "#FF4D2E",
-    taskId: "task-003",
+    taskId: "00000000-0000-4000-8000-000000000003",
   },
   {
-    id: "event-004",
+    id: "00000000-0000-4000-8000-000000000304",
     title: "English Composition Essay Due",
     type: "task-deadline",
     date: daysFromNow(5),
     color: "#FF4D2E",
-    taskId: "task-004",
+    taskId: "00000000-0000-4000-8000-000000000004",
   },
   {
-    id: "event-005",
+    id: "00000000-0000-4000-8000-000000000305",
     title: "Linear Algebra Midterm Review Due",
     type: "task-deadline",
     date: daysFromNow(7),
     color: "#FF4D2E",
-    taskId: "task-006",
+    taskId: "00000000-0000-4000-8000-000000000006",
   },
   {
-    id: "event-006",
+    id: "00000000-0000-4000-8000-000000000306",
     title: "Database Systems Project Due",
     type: "task-deadline",
     date: daysFromNow(-3),
     color: "#FF4D2E",
-    taskId: "task-007",
+    taskId: "00000000-0000-4000-8000-000000000007",
   },
   {
-    id: "event-007",
+    id: "00000000-0000-4000-8000-000000000307",
     title: "Operating Systems Assignment 2 Due",
     type: "task-deadline",
     date: daysFromNow(4),
     color: "#FF4D2E",
-    taskId: "task-008",
+    taskId: "00000000-0000-4000-8000-000000000008",
   },
   {
-    id: "event-008",
+    id: "00000000-0000-4000-8000-000000000308",
     title: "Discrete Mathematics Problem Set Due",
     type: "task-deadline",
     date: daysFromNow(6),
     color: "#FF4D2E",
-    taskId: "task-009",
+    taskId: "00000000-0000-4000-8000-000000000009",
   },
   {
-    id: "event-009",
+    id: "00000000-0000-4000-8000-000000000309",
     title: "Software Engineering Documentation Due",
     type: "task-deadline",
     date: daysFromNow(8),
     color: "#FF4D2E",
-    taskId: "task-010",
+    taskId: "00000000-0000-4000-8000-000000000010",
   },
 
   // Study sessions
   {
-    id: "event-010",
+    id: "00000000-0000-4000-8000-000000000310",
     title: "Study: Calculus II Problem Set 5",
     type: "study-session",
     date: hoursFromNow(1),
     startTime: "14:00",
     endTime: "14:25",
     color: "#3b82f6",
-    taskId: "task-001",
+    taskId: "00000000-0000-4000-8000-000000000001",
   },
   {
-    id: "event-011",
+    id: "00000000-0000-4000-8000-000000000311",
     title: "Study: Data Structures Assignment 3",
     type: "study-session",
     date: daysFromNow(1),
     startTime: "09:00",
     endTime: "09:50",
     color: "#3b82f6",
-    taskId: "task-002",
+    taskId: "00000000-0000-4000-8000-000000000002",
   },
   {
-    id: "event-012",
+    id: "00000000-0000-4000-8000-000000000312",
     title: "Study: Physics Lab Report",
     type: "study-session",
     date: daysFromNow(1),
     startTime: "15:00",
     endTime: "15:45",
     color: "#3b82f6",
-    taskId: "task-003",
+    taskId: "00000000-0000-4000-8000-000000000003",
   },
   {
-    id: "event-013",
+    id: "00000000-0000-4000-8000-000000000313",
     title: "Study: English Composition Essay",
     type: "study-session",
     date: daysFromNow(2),
     startTime: "10:00",
     endTime: "11:00",
     color: "#3b82f6",
-    taskId: "task-004",
+    taskId: "00000000-0000-4000-8000-000000000004",
   },
   {
-    id: "event-014",
+    id: "00000000-0000-4000-8000-000000000314",
     title: "Study: Linear Algebra Review",
     type: "study-session",
     date: daysFromNow(3),
@@ -368,7 +368,7 @@ export const mockCalendarEvents: CalendarEvent[] = [
     color: "#3b82f6",
   },
   {
-    id: "event-015",
+    id: "00000000-0000-4000-8000-000000000315",
     title: "Study: Discrete Mathematics",
     type: "study-session",
     date: daysFromNow(4),
@@ -377,7 +377,7 @@ export const mockCalendarEvents: CalendarEvent[] = [
     color: "#3b82f6",
   },
   {
-    id: "event-016",
+    id: "00000000-0000-4000-8000-000000000316",
     title: "Study: Web Development",
     type: "study-session",
     date: daysFromNow(-1),
@@ -386,7 +386,7 @@ export const mockCalendarEvents: CalendarEvent[] = [
     color: "#3b82f6",
   },
   {
-    id: "event-017",
+    id: "00000000-0000-4000-8000-000000000317",
     title: "Study: Operating Systems",
     type: "study-session",
     date: daysFromNow(2),
@@ -395,7 +395,7 @@ export const mockCalendarEvents: CalendarEvent[] = [
     color: "#3b82f6",
   },
   {
-    id: "event-018",
+    id: "00000000-0000-4000-8000-000000000318",
     title: "Study: Software Engineering",
     type: "study-session",
     date: daysFromNow(5),
@@ -404,7 +404,7 @@ export const mockCalendarEvents: CalendarEvent[] = [
     color: "#3b82f6",
   },
   {
-    id: "event-019",
+    id: "00000000-0000-4000-8000-000000000319",
     title: "Study: Database Systems",
     type: "study-session",
     date: daysFromNow(-2),
@@ -413,7 +413,7 @@ export const mockCalendarEvents: CalendarEvent[] = [
     color: "#3b82f6",
   },
   {
-    id: "event-020",
+    id: "00000000-0000-4000-8000-000000000320",
     title: "Study: Calculus II Review",
     type: "study-session",
     date: daysFromNow(0),
@@ -472,7 +472,7 @@ export const mockUser: UserProfile = {
 
 export const mockNotifications: Notification[] = [
   {
-    id: "n1",
+    id: "00000000-0000-4000-8000-000000000401",
     taskTitle: "Calculus II Problem Set 5",
     message:
       "Your future self is already thanking you for this moment of focus.",
@@ -480,7 +480,7 @@ export const mockNotifications: Notification[] = [
     type: "reminder",
   },
   {
-    id: "n2",
+    id: "00000000-0000-4000-8000-000000000402",
     taskTitle: "Data Structures Assignment 3",
     message:
       "Every expert was once a beginner. You're building mastery right now.",
@@ -488,42 +488,42 @@ export const mockNotifications: Notification[] = [
     type: "deadline-approaching",
   },
   {
-    id: "n3",
+    id: "00000000-0000-4000-8000-000000000403",
     taskTitle: "Physics Lab Report",
     message: "The only way to do great work is to love what you do. Start now.",
     deadline: daysFromNow(1),
     type: "deadline-approaching",
   },
   {
-    id: "n4",
+    id: "00000000-0000-4000-8000-000000000404",
     taskTitle: "English Composition Essay",
     message: "Success is the sum of small efforts repeated day in and day out.",
     deadline: daysFromNow(5),
     type: "reminder",
   },
   {
-    id: "n5",
+    id: "00000000-0000-4000-8000-000000000405",
     taskTitle: "Linear Algebra Midterm Review",
     message: "You've got this! One step at a time, one problem at a time.",
     deadline: daysFromNow(7),
     type: "reminder",
   },
   {
-    id: "n6",
+    id: "00000000-0000-4000-8000-000000000406",
     taskTitle: "Discrete Mathematics Problem Set",
     message: "Progress over perfection. Every line of code brings you closer.",
     deadline: daysFromNow(6),
     type: "reminder",
   },
   {
-    id: "n7",
+    id: "00000000-0000-4000-8000-000000000407",
     taskTitle: "Operating Systems Assignment 2",
     message: "Your dedication today is the foundation of tomorrow's success.",
     deadline: daysFromNow(4),
     type: "reminder",
   },
   {
-    id: "n8",
+    id: "00000000-0000-4000-8000-000000000408",
     taskTitle: "Software Engineering Documentation",
     message:
       "Great things never came from comfort zones. You're doing amazing.",
@@ -538,26 +538,26 @@ export const mockNotifications: Notification[] = [
 
 export const mockProjects: Project[] = [
   {
-    id: "project-001",
+    id: "00000000-0000-4000-8000-000000000501",
     name: "Capstone Collaboration",
     description: "Team coordination for the semester capstone build.",
-    ownerId: "member-001",
+    ownerId: "00000000-0000-4000-8000-000000000601",
     members: [
       {
-        id: "member-001",
+        id: "00000000-0000-4000-8000-000000000601",
         name: "Alex Scholar",
         handle: "alex@scholar.plot",
         role: "owner",
       },
       {
-        id: "member-002",
+        id: "00000000-0000-4000-8000-000000000602",
         name: "Jamie Rivera",
         handle: "jamie@scholar.plot",
         role: "moderator",
       },
-      { id: "member-003", name: "Sam Lee", handle: "sam", role: "member" },
+      { id: "00000000-0000-4000-8000-000000000603", name: "Sam Lee", handle: "sam", role: "member" },
       {
-        id: "member-004",
+        id: "00000000-0000-4000-8000-000000000604",
         name: "Taylor Park",
         handle: "taylor",
         role: "member",
@@ -565,53 +565,53 @@ export const mockProjects: Project[] = [
     ],
     tasks: [
       {
-        id: "proj-task-001",
+        id: "00000000-0000-4000-8000-000000000701",
         title: "Finalize project scope",
         description: "Lock requirements and success criteria for the MVP.",
 
         priority: "high",
         status: "not-done",
-        assignedTo: "member-003",
+        assignedTo: "00000000-0000-4000-8000-000000000603",
         createdAt: daysFromNow(-5),
       },
       {
-        id: "proj-task-002",
+        id: "00000000-0000-4000-8000-000000000702",
         title: "Create kanban board UI",
         description: "Build the column layout and task cards.",
 
         priority: "medium",
         status: "pending",
-        assignedTo: "member-002",
+        assignedTo: "00000000-0000-4000-8000-000000000602",
         createdAt: daysFromNow(-4),
       },
       {
-        id: "proj-task-003",
+        id: "00000000-0000-4000-8000-000000000703",
         title: "Review API integration plan",
         description: "Validate endpoints and data contracts.",
 
         priority: "low",
         status: "done",
-        assignedTo: "member-001",
+        assignedTo: "00000000-0000-4000-8000-000000000601",
         createdAt: daysFromNow(-8),
       },
     ],
     createdAt: daysFromNow(-10),
   },
   {
-    id: "project-002",
+    id: "00000000-0000-4000-8000-000000000502",
     name: "Open Study Group",
     description: "Shared tasks for the weekly study group.",
-    ownerId: "member-005",
+    ownerId: "00000000-0000-4000-8000-000000000605",
     members: [
-      { id: "member-005", name: "Riley Chen", handle: "riley", role: "owner" },
+      { id: "00000000-0000-4000-8000-000000000605", name: "Riley Chen", handle: "riley", role: "owner" },
       {
-        id: "member-006",
+        id: "00000000-0000-4000-8000-000000000606",
         name: "Priya Patel",
         handle: "priya",
         role: "moderator",
       },
       {
-        id: "member-007",
+        id: "00000000-0000-4000-8000-000000000607",
         name: "Jordan Blake",
         handle: "jordan",
         role: "member",
@@ -619,7 +619,7 @@ export const mockProjects: Project[] = [
     ],
     tasks: [
       {
-        id: "proj-task-004",
+        id: "00000000-0000-4000-8000-000000000704",
         title: "Post meeting notes",
         description: "Summarize decisions and next steps.",
 
@@ -628,26 +628,27 @@ export const mockProjects: Project[] = [
         createdAt: daysFromNow(-1),
       },
       {
-        id: "proj-task-005",
+        id: "00000000-0000-4000-8000-000000000705",
         title: "Collect resource links",
         description: "Gather references and practice sets.",
 
         priority: "low",
         status: "pending",
-        assignedTo: "member-007",
+        assignedTo: "00000000-0000-4000-8000-000000000607",
         createdAt: daysFromNow(-2),
       },
       {
-        id: "proj-task-006",
+        id: "00000000-0000-4000-8000-000000000706",
         title: "Finalize agenda",
         description: "Confirm topics for the next session.",
 
         priority: "high",
         status: "done",
-        assignedTo: "member-006",
+        assignedTo: "00000000-0000-4000-8000-000000000606",
         createdAt: daysFromNow(-4),
       },
     ],
     createdAt: daysFromNow(-3),
   },
 ];
+
