@@ -135,11 +135,21 @@ async function uploadRemotePDF(source: string, displayName: string) {
   }
 };
 
+
+
 export async function aiRecommend(context: string, attachments?: string[]) {
-  const contents: Array<
+  const promptParts: Array<
     { text: string } |
     { fileData: { mimeType: string; fileUri: string } }
-  > = [{ text: context }];
+  > = [
+    {
+      text: [
+        "Use the user context and all attached PDF documents together as one prompt.",
+        "User context:",
+        context,
+      ].join("\n\n"),
+    },
+  ];
 
   if (attachments?.length) {
     const uploadedPdfs = await Promise.all(
@@ -153,7 +163,7 @@ export async function aiRecommend(context: string, attachments?: string[]) {
         throw new Error("Uploaded PDF does not have a URI.");
       }
 
-      contents.push({
+      promptParts.push({
         fileData: {
           mimeType: "application/pdf",
           fileUri: uploadedPdf.uri,
@@ -161,6 +171,13 @@ export async function aiRecommend(context: string, attachments?: string[]) {
       });
     }
   }
+
+  const contents = [
+    {
+      role: "user",
+      parts: promptParts,
+    },
+  ];
 
   // config defines the parameters for the model's response that allows the model to be tailored in order to better suit the user's needs and preferences
   const config = {
@@ -189,5 +206,3 @@ export async function aiRecommend(context: string, attachments?: string[]) {
   console.log(response);
   return response;
 }
-
-aiRecommend("Plan my week to study for the research paper", ["https://arxiv.org/pdf/2306.14881.pdf"]);
