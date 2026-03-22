@@ -14,68 +14,248 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ─── ENUMS ───────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  admin
+  user
+}
+
+enum ProjectStatus {
+  active
+  completed
+  archived
+}
+
+enum ProjectUserRole {
+  owner
+  moderator
+  member
+}
+
+enum TaskStatus {
+  Completed
+  In_Progress @map("In Progress")
+  Pending
+}
+
+enum SessionTimerStatus {
+  idle
+  running
+  paused
+  completed
+}
+
+enum ReminderIntervalType {
+  hours
+  days
+  weeks
+  fixed
+  custom
+}
+
+enum AlertType {
+  reminder
+  deadline_approaching @map("deadline-approaching")
+  timer_complete       @map("timer-complete")
+}
+
+// ─── MODELS ──────────────────────────────────────────────────────────────────
+
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  name          String?
-  image         String?
-  emailVerified Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  user_id      String   @id
+  analytics_id Int?     @unique
+  user_name    String
+  user_email   String   @unique
+  avatar_url   String?
+  user_role    UserRole @default(user)
+  user_last_login DateTime
+  user_created_at DateTime @default(now())
 
-  sessions Session[]
-  accounts Account[]
-  todos    Todo[]
+  analytics       Analytics?      @relation(fields: [analytics_id], references: [analytics_id])
+  project_members ProjectUser[]
+  task_users      TaskUser[]
+  session_timer_user SessionTimerUser[]
+
+  @@map("user")
 }
 
-model Session {
-  id        String   @id @default(cuid())
-  userId    String
-  token     String   @unique
-  expiresAt DateTime
-  ipAddress String?
-  userAgent String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Project {
+  project_id          Int           @id @default(autoincrement())
+  project_name        String
+  project_description String?       @db.Text
+  project_deadline    DateTime
+  project_status      ProjectStatus @default(active)
+  project_priority    Decimal       @db.Decimal(2, 1)
+  project_created_at  DateTime      @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project_user ProjectUser[]
+  tasks           Task[]
+
+  @@map("project")
 }
 
-model Account {
-  id                String    @id @default(cuid())
-  userId            String
-  accountId         String
-  providerId        String
-  accessToken       String?
-  refreshToken      String?
-  accessTokenExpiresAt  DateTime?
-  refreshTokenExpiresAt DateTime?
-  scope             String?
-  idToken           String?
-  password          String?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+model ProjectUser {
+  project_id        Int
+  user_id           String
+  user_joined_at    DateTime          @default(now())
+  project_user_role ProjectUserRole
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [project_id], references: [project_id])
+  user    User    @relation(fields: [user_id], references: [user_id])
+
+  @@id([project_id, user_id])
+  @@map("project_user")
 }
 
-model Verification {
-  id         String   @id @default(cuid())
-  identifier String
-  value      String
-  expiresAt  DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+model Task {
+  task_id           Int        @id @default(autoincrement())
+  project_id        Int?
+  task_name         String
+  task_description  String?    @db.Text
+  task_deadline     DateTime
+  task_priority     Decimal    @db.Decimal(2, 1)
+  task_status       TaskStatus @default(Pending)
+  task_completed_at DateTime?
+  task_created_at   DateTime   @default(now())
+
+  project        Project?       @relation(fields: [project_id], references: [project_id])
+  task_users     TaskUser[]
+  session_timers SessionTimer[]
+  task_reminders TaskReminder[]
+
+  @@map("task")
 }
 
-model Todo {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  completed   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model TaskUser {
+  task_id     Int
+  user_id     String
+  assigned_at DateTime @default(now())
 
-  userId String
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task Task @relation(fields: [task_id], references: [task_id])
+  user User @relation(fields: [user_id], references: [user_id])
+
+  @@id([task_id, user_id])
+  @@map("task_user")
+}
+
+model Attachment {
+  attachment_id          Int      @id @default(autoincrement())
+  file_name              String
+  file_path              String
+  file_type              String
+  attachment_uploaded_at DateTime @default(now())
+
+  session_timers SessionTimer[]
+
+  @@map("attachment")
+}
+
+model StudySession {
+  study_session_id                  Int      @id @default(autoincrement())
+  duration                    Int      @default(25)
+  break_duration              Int      @default(5)
+  study_session_scheduled_at  DateTime
+  study_session_created_at    DateTime @default(now())
+  checklist_json              Json
+
+  session_timers   SessionTimer[]
+  session_reminder StudySessionReminder[]
+
+  @@map("study_session")
+}
+
+model SessionTimer {
+  session_timer_id  Int      @id @default(autoincrement())
+  study_session_id  Int
+  task_id           Int
+  attachment_id     Int
+  start_time        DateTime
+
+  study_session      StudySession           @relation(fields: [study_session_id], references: [study_session_id])
+  task               Task                   @relation(fields: [task_id], references: [task_id])
+  attachment         Attachment             @relation(fields: [attachment_id], references: [attachment_id])
+  session_timer_user SessionTimerUser[]
+  session_reminder   StudySessionReminder[]
+
+  @@map("session_timer")
+}
+
+model SessionTimerUser {
+  study_session_id  Int
+  session_timer_id  Int
+  user_id           String
+  joined_at         DateTime
+  current_time      Int                @default(0)
+  status            SessionTimerStatus @default(idle)
+  completed_at      DateTime?
+  actual_duration   Int?
+
+  study_session StudySession @relation(fields: [study_session_id], references: [study_session_id])
+  session_timer SessionTimer @relation(fields: [session_timer_id], references: [session_timer_id])
+  user          User         @relation(fields: [user_id], references: [user_id])
+
+  @@id([study_session_id, session_timer_id, user_id])
+  @@map("session_timer_user")
+}
+
+model StudySessionReminder {
+  reminder_id      Int                  @id @default(autoincrement())
+  session_timer_id Int
+  interval_type    ReminderIntervalType
+  interval_value   Int?
+  remind_at        DateTime
+  is_active        Boolean              @default(true)
+  reminder_created_at DateTime          @default(now())
+
+  session_timer SessionTimer  @relation(fields: [session_timer_id], references: [session_timer_id])
+  alerts        Alert[]
+
+  @@map("study_session_reminder")
+}
+
+model TaskReminder {
+  reminder_id         Int                  @id @default(autoincrement())
+  task_id             Int
+  interval_type       ReminderIntervalType
+  interval_value      Int?
+  remind_at           DateTime
+  is_active           Boolean              @default(true)
+  reminder_created_at DateTime             @default(now())
+
+  task   Task    @relation(fields: [task_id], references: [task_id])
+  alerts Alert[]
+
+  @@map("task_reminder")
+}
+
+model Alert {
+  alert_id              Int       @id @default(autoincrement())
+  study_session_reminder_id Int?
+  task_reminder_id      Int?
+  alert_type            AlertType
+  message               String    @db.Text
+  message_deadline      DateTime?
+  sent_at               DateTime  @default(now())
+
+  study_session_reminder StudySessionReminder? @relation(fields: [study_session_reminder_id], references: [reminder_id])
+  task_reminder          TaskReminder?         @relation(fields: [task_reminder_id], references: [reminder_id])
+
+  @@map("alert")
+}
+
+model Analytics {
+  analytics_id            Int      @id @default(autoincrement())
+  tasks_completed_early   Int      @default(0)
+  tasks_completed_on_time Int      @default(0)
+  tasks_completed_late    Int      @default(0)
+  tasks_pending           Int      @default(0)
+  total_focus_minutes     Int      @default(0)
+  total_tasks_completed   Int      @default(0)
+  streak                  Int      @default(0)
+  updated_at              DateTime @default(now())
+
+  user User?
+
+  @@map("analytics")
 }
