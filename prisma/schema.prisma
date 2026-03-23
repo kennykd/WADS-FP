@@ -160,7 +160,7 @@ model StudySession {
   checklist_json              Json
 
   session_timers   SessionTimer[]
-  session_reminder StudySessionReminder[]
+  session_timer_user SessionTimerUser[]
 
   @@map("study_session")
 }
