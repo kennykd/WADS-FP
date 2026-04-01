@@ -100,21 +100,23 @@ export async function POST(req: NextRequest) {
     // If firebaseName or firebaseImage exist on the token, sync them to the DB.
     // (THIS IS IMPORTANT) If they are absent, keep whatever is already stored — never overwrite with null.
     const user = await prisma.user.upsert({
-      where: { email: decodedToken.email! },
+      where: { user_email: decodedToken.email! },
       update: {
-        ...(name ? { name } : {}),
-        ...(firebaseImage ? { image: firebaseImage } : {}),
+        ...(name ? { user_name: name } : {}),
+        ...(firebaseImage ? { avatar_url: firebaseImage } : {}),
+        user_last_login: new Date(),
       },
       create: {
-        email: decodedToken.email!,
-        name: name || null,
-        image: firebaseImage || null,
-        emailVerified: decodedToken.email_verified || false,
+        user_id: decodedToken.uid,
+        user_email: decodedToken.email!,
+        user_name: name || "User",
+        avatar_url: firebaseImage || null,
+        user_last_login: new Date(),
       },
     });
 
     // Set session cookie
-    const response = NextResponse.json({ status: "success", userId: user.id });
+    const response = NextResponse.json({ status: "success", userId: user.user_id });
     response.cookies.set("session", idToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

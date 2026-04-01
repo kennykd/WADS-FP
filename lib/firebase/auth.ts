@@ -23,17 +23,17 @@ export async function getSession(): Promise<SessionUser | null> {
 
     // Search for user in database
     const user = await prisma.user.findUnique({
-      where: { email: decodedToken.email! },
+      where: { user_email: decodedToken.email! },
     });
 
     if (!user) return null;
 
     // RETURNS the authenticated user data from the database
     return {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      image: user.image,
+      id: user.user_id,
+      email: user.user_email,
+      name: user.user_name,
+      image: user.avatar_url,
     };
   } catch {
     console.log(
