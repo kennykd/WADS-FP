@@ -101,7 +101,7 @@ model ProjectUser {
   user_joined_at    DateTime          @default(now())
   project_user_role ProjectUserRole
 
-  project Project @relation(fields: [project_id], references: [project_id])
+  project Project @relation(fields: [project_id], references: [project_id], onDelete: Cascade)
   user    User    @relation(fields: [user_id], references: [user_id])
 
   @@id([project_id, user_id])
@@ -119,7 +119,7 @@ model Task {
   task_completed_at DateTime?
   task_created_at   DateTime   @default(now())
 
-  project        Project?       @relation(fields: [project_id], references: [project_id])
+  project        Project?       @relation(fields: [project_id], references: [project_id], onDelete: SetNull)
   task_users     TaskUser[]
   session_timers SessionTimer[]
   task_reminders TaskReminder[]
@@ -132,7 +132,7 @@ model TaskUser {
   user_id     String
   assigned_at DateTime @default(now())
 
-  task Task @relation(fields: [task_id], references: [task_id])
+  task Task @relation(fields: [task_id], references: [task_id], onDelete: Cascade)
   user User @relation(fields: [user_id], references: [user_id])
 
   @@id([task_id, user_id])
@@ -152,7 +152,9 @@ model Attachment {
 }
 
 model StudySession {
-  study_session_id                  Int      @id @default(autoincrement())
+  study_session_id            Int      @id @default(autoincrement())
+  study_session_name          String
+  study_session_description   String?  @db.Text
   duration                    Int      @default(25)
   break_duration              Int      @default(5)
   study_session_scheduled_at  DateTime
@@ -168,13 +170,13 @@ model StudySession {
 model SessionTimer {
   session_timer_id  Int      @id @default(autoincrement())
   study_session_id  Int
-  task_id           Int
-  attachment_id     Int
+  task_id           Int?
+  attachment_id     Int?
   start_time        DateTime
 
   study_session      StudySession           @relation(fields: [study_session_id], references: [study_session_id])
-  task               Task                   @relation(fields: [task_id], references: [task_id])
-  attachment         Attachment             @relation(fields: [attachment_id], references: [attachment_id])
+  task               Task?                  @relation(fields: [task_id], references: [task_id])
+  attachment         Attachment?            @relation(fields: [attachment_id], references: [attachment_id])
   session_timer_user SessionTimerUser[]
   session_reminder   StudySessionReminder[]
 

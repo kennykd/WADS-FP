@@ -1,10 +1,12 @@
 import { z } from 'zod';
 
 export const createStudySchema = z.object({
-  taskId: z.string(),
+  taskId: z.string()
+  .optional(),
   taskTitle: z.string()
   .min(1, 'Task title is required')
-  .max(100, 'Task title cannot exceed 100 characters'),
+  .max(100, 'Task title cannot exceed 100 characters')
+  .optional(),
   duration: z.coerce.number()
   .min(1, 'Duration must be at least 1 minute'),
   breakDuration: z.coerce.number()

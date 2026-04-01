@@ -3,7 +3,7 @@
  * Frontend-only types for UI components and mock data
  */
 
-export type TaskStatus = "todo" | "in-progress" | "done";
+export type TaskStatus = "Pending" | "In_Progress" | "Completed";
 export type ReminderFrequency = "daily" | "every-3-days" | "weekly" | "none"; 
 
 export interface Task {
@@ -41,10 +41,10 @@ export interface ChecklistItem {
 export interface StudySession {
   /** Unique identifier for the study session */
   id: string;
-  /** Reference to the associated task ID */
-  taskId: string;
-  /** Title of the associated task */
-  taskTitle: string;
+  /** Optional reference to the associated task ID */
+  taskId?: string;
+  /** Optional title of the associated task */
+  taskTitle?: string;
   /** Duration allocated for study in minutes (default: 25 for Pomodoro) */
   duration: number;
   /** Break duration in minutes (default: 5 for Pomodoro) */
@@ -149,45 +149,30 @@ export interface ProjectMember {
   role: ProjectRole;
 }
 
-export type ProjectTaskStatus = "not-done" | "pending" | "done";
-export type ProjectTaskPriority = "low" | "medium" | "high";
+export type ProjectTaskStatus = TaskStatus;
 
 export interface ProjectTask {
-  /** Unique identifier for the task */
   id: string;
-  /** Task title */
   title: string;
-  /** Optional description */
   description?: string;
-  /** Optional attachments */
   attachments?: string[];
-  /** Reminder frequency/timing */
   reminder?: ReminderFrequency;
-
-  /** Priority level */
-  priority: ProjectTaskPriority;
-  /** Status column */
+  priority: number;
   status: ProjectTaskStatus;
-  /** Assigned member id (if any) */
   assignedTo?: string;
-  /** Timestamp when task was created */
   createdAt: Date;
 }
 
 export interface Project {
-  /** Unique identifier for the project */
   id: string;
-  /** Project name */
   name: string;
-  /** Optional project description */
   description?: string;
-  /** Owner member id */
+  deadline: Date;
+  priority: number;
+  status: "active" | "completed" | "archived";
   ownerId: string;
-  /** Members in the project */
   members: ProjectMember[];
-  /** Tasks in the project */
   tasks: ProjectTask[];
-  /** Timestamp when project was created */
   createdAt: Date;
 }
 

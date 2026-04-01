@@ -6,6 +6,12 @@ export const createProjectSchema = z.object({
   .max(100, 'Project name cannot exceed 100 characters'),
   description: z.string()
   .optional(),
+  deadline: z.coerce.date()
+  .refine((date) => date >= new Date(),
+    { message: "Deadline must be in the future" }
+  ),
+  priority: z.coerce.number()
+  .min(0.5).max(5),
   ownerId: z.string()
   .min(1, 'Owner ID is required'),
   members: z.array(z.object({
@@ -26,6 +32,14 @@ export const updateProjectSchema = z.object({
   .optional(),
   description: z.string()
   .optional(),
+  deadline: z.coerce.date()
+  .refine((date) => date >= new Date(),
+    { message: "Deadline must be in the future" }
+  )
+  .optional(),
+  priority: z.coerce.number()
+  .min(0.5).max(5)
+  .optional(),
   members: z.array(z.object({
     id: z.string(),
     name: z.string()
@@ -38,15 +52,16 @@ export const updateProjectSchema = z.object({
 });
 
 export const createProjectTaskSchema = z.object({
-  projectId: z.string()
+  projectId: z.coerce.number()
   .min(1, 'Project ID is required'),
   title: z.string()
   .min(1, 'Title is required')
   .max(100, 'Title cannot exceed 100 characters'),
   description: z.string()
   .optional(),
-  priority: z.enum(['low', 'medium', 'high']),
-  status: z.enum(['not-done', 'pending', 'done']),
+  priority: z.coerce.number()
+  .min(0.5).max(5),
+  status: z.enum(['Pending', 'In_Progress', 'Completed']),
   assignedTo: z.string()
   .optional(),
   attachments: z.array(z.string())
@@ -62,9 +77,10 @@ export const updateProjectTaskSchema = z.object({
   .optional(),
   description: z.string()
   .optional(),
-  priority: z.enum(['low', 'medium', 'high'])
+  priority: z.coerce.number()
+  .min(0.5).max(5)
   .optional(),
-  status: z.enum(['not-done', 'pending', 'done'])
+  status: z.enum(['Pending', 'In_Progress', 'Completed'])
   .optional(),
   assignedTo: z.string()
   .optional(),
